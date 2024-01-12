@@ -1,12 +1,26 @@
 from tkinter import *
+from tkinter import messagebox
 
-def sentToFile():
-    with open("data.txt", mode="w") as file:
+def sent_To_File():
+    website_input = website_entry.get()
+    em_user_input = em_user_entry.get()
+    passw_input = passw_entry.get()
+    isok = False
 
+    if website_input == em_user_input and passw_input == em_user_input:
+        messagebox.showerror(title="Error", message="Password is invalid")
+    elif len(website_input) == 0 or len(em_user_input) == 0 or len(passw_input) == 0:
+        messagebox.showinfo(title="Error", message="Fields are empty.")
+    else:
+        isok = messagebox.askokcancel(title=website,
+                                      message=f"Are you sure: \nEmail: {em_user_input}\nPassword: {passw_input} \n Is it ok to save?")
 
+    if isok:
+        with open("data.txt", mode="a") as file:
+            file.write(f"\n Website Name= {website_input} Email= {em_user_input} Password = {passw_input}")
 
-
-
+    website_entry.delete(0, END)
+    passw_entry.delete(0, END)
 
 window = Tk()
 
@@ -34,13 +48,14 @@ website_entry.focus()
 em_user_entry = Entry(font="Arial", width=35)
 em_user_entry.grid(row=2, column=1, columnspan=2)
 em_user_entry.insert(0, "sachithRKA@gmail.com")
+
 passw_entry = Entry(font="Arial", width=21)
 passw_entry.grid(row=3, column=1)
 
 generateP = Button(text="Generate Password", font="Arial")
 generateP.grid(row=3, column=2)
 
-add= Button(text="Add", width=36)
+add= Button(text="Add", width=36, command=sent_To_File)
 add.grid(row=4, column=1, columnspan=2)
 
 window.mainloop()
